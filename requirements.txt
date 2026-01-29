@@ -4,4 +4,6 @@ requests
 matplotlib
 scikit-learn
 seaborn
--e .
+catboost
+xgboost
+# -e .
