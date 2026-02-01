@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Performance Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+            --input-bg: rgba(0, 0, 0, 0.3);
+            --text-color: #ffffff;
+            --glow-color: #a6c1ee;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
+            border: var(--glass-border);
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            font-size: 2rem;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #e0e0e0;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--input-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            appearance: none;
+        }
+
+        /* Custom arrow for select dropdowns */
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper::after {
+            content: '▼';
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--glow-color);
+            box-shadow: 0 0 15px rgba(166, 193, 238, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Remove spinner from number input */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.4);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.4);
+            border-radius: 15px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="glass-card">
+            <h1>Student Exam Performance Indicator</h1>
+            <form action="{{ url_for('predict_datapoint') }}" method="post">
+                
+                <div class="form-group">
+                    <label for="gender">👤 Gender</label>
+                    <div class="select-wrapper">
+                        <select name="gender" id="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ethnicity">🌍 Race or Ethnicity</label>
+                    <div class="select-wrapper">
+                        <select name="ethnicity" id="ethnicity" required>
+                            <option value="" disabled selected>Select Group</option>
+                            <option value="group A">Group A</option>
+                            <option value="group B">Group B</option>
+                            <option value="group C">Group C</option>
+                            <option value="group D">Group D</option>
+                            <option value="group E">Group E</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="parental_level_of_education">📚 Parental Level of Education</label>
+                    <div class="select-wrapper">
+                        <select name="parental_level_of_education" id="parental_level_of_education" required>
+                            <option value="" disabled selected>Select Education Level</option>
+                            <option value="associate's degree">Associate's Degree</option>
+                            <option value="bachelor's degree">Bachelor's Degree</option>
+                            <option value="high school">High School</option>
+                            <option value="master's degree">Master's Degree</option>
+                            <option value="some college">Some College</option>
+                            <option value="some high school">Some High School</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lunch">🍽️ Lunch Type</label>
+                    <div class="select-wrapper">
+                        <select name="lunch" id="lunch" required>
+                            <option value="" disabled selected>Select Lunch Type</option>
+                            <option value="free/reduced">Free/Reduced</option>
+                            <option value="standard">Standard</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="test_preparation_course">🧪 Test Preparation Course</label>
+                    <div class="select-wrapper">
+                        <select name="test_preparation_course" id="test_preparation_course" required>
+                            <option value="" disabled selected>Select Course Status</option>
+                            <option value="none">None</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reading_score">📖 Reading Score (0-100)</label>
+                    <input type="number" name="reading_score" id="reading_score" min="0" max="100" placeholder="Enter score" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="writing_score">✍️ Writing Score (0-100)</label>
+                    <input type="number" name="writing_score" id="writing_score" min="0" max="100" placeholder="Enter score" required>
+                </div>
+
+                <button type="submit">Predict your Maths Score</button>
+            </form>
+
+            {% if results %}
+            <div class="result-box">
+                <div class="result-text">The prediction is {{ results }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
