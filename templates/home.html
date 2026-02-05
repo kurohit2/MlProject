@@ -1,199 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Exam Performance Prediction</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Grade Sage | Performance Prediction Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.2);
-            --input-bg: rgba(0, 0, 0, 0.3);
-            --text-color: #ffffff;
-            --glow-color: #a6c1ee;
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --secondary: #a855f7;
+            --bg-dark: #0f172a;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(15, 23, 42, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            color: var(--text-color);
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            justify-content: center;
+            padding: 2rem;
         }
 
         .container {
             width: 100%;
-            max-width: 600px;
-            padding: 20px;
+            max-width: 800px;
+            z-index: 1;
         }
 
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 20px;
-            border: var(--glass-border);
-            padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        h1 {
+        .header {
             text-align: center;
-            margin-bottom: 30px;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            font-size: 2rem;
-            margin-top: 0;
+            margin-bottom: 3rem;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            color: #e0e0e0;
-        }
-
-        select, input[type="number"] {
-            width: 100%;
-            padding: 12px 15px;
-            background: var(--input-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: white;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-            appearance: none;
-        }
-
-        /* Custom arrow for select dropdowns */
-        .select-wrapper {
-            position: relative;
-        }
-        
-        .select-wrapper::after {
-            content: '▼';
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: var(--glow-color);
-            box-shadow: 0 0 15px rgba(166, 193, 238, 0.3);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        /* Remove spinner from number input */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background: var(--primary-gradient);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.4);
-            filter: brightness(1.1);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .result-box {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(46, 204, 113, 0.2);
-            border: 1px solid rgba(46, 204, 113, 0.4);
-            border-radius: 15px;
-            text-align: center;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .result-text {
-            font-size: 1.5rem;
+        h1 {
+            font-size: 2.5rem;
             font-weight: 700;
-            color: #fff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(to bottom right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1rem;
         }
 
-        @media (max-width: 480px) {
-            .glass-card {
-                padding: 25px;
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            padding-left: 0.25rem;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: var(--primary);
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn-predict {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 4px 14px 0 var(--primary-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            background: #4f46e5;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .result-container {
+            margin-top: 2.5rem;
+            padding: 2rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            text-align: center;
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-label {
+            font-size: 0.875rem;
+            color: #34d399;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .glass-card {
+                padding: 1.5rem;
+            }
+
             h1 {
-                font-size: 1.5rem;
+                font-size: 2rem;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="glass-card">
-            <h1>Student Exam Performance Indicator</h1>
+            <div class="header">
+                <span class="badge">Inference Engine v2.0</span>
+                <h1>Performance Predictor</h1>
+                <p class="subtitle">Enter student data to calculate projected math scores</p>
+            </div>
+
             <form action="{{ url_for('predict_datapoint') }}" method="post">
-                
-                <div class="form-group">
-                    <label for="gender">👤 Gender</label>
-                    <div class="select-wrapper">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
                         <select name="gender" id="gender" required>
                             <option value="" disabled selected>Select Gender</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="ethnicity">🌍 Race or Ethnicity</label>
-                    <div class="select-wrapper">
+                    <div class="form-group">
+                        <label for="ethnicity">Race or Ethnicity</label>
                         <select name="ethnicity" id="ethnicity" required>
                             <option value="" disabled selected>Select Group</option>
                             <option value="group A">Group A</option>
@@ -203,11 +247,9 @@
                             <option value="group E">Group E</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="parental_level_of_education">📚 Parental Level of Education</label>
-                    <div class="select-wrapper">
+                    <div class="form-group full-width">
+                        <label for="parental_level_of_education">Parental Level of Education</label>
                         <select name="parental_level_of_education" id="parental_level_of_education" required>
                             <option value="" disabled selected>Select Education Level</option>
                             <option value="associate's degree">Associate's Degree</option>
@@ -218,49 +260,60 @@
                             <option value="some high school">Some High School</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="lunch">🍽️ Lunch Type</label>
-                    <div class="select-wrapper">
+                    <div class="form-group">
+                        <label for="lunch">Lunch Type</label>
                         <select name="lunch" id="lunch" required>
-                            <option value="" disabled selected>Select Lunch Type</option>
+                            <option value="" disabled selected>Select Type</option>
                             <option value="free/reduced">Free/Reduced</option>
                             <option value="standard">Standard</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="test_preparation_course">🧪 Test Preparation Course</label>
-                    <div class="select-wrapper">
+                    <div class="form-group">
+                        <label for="test_preparation_course">Test Prep Course</label>
                         <select name="test_preparation_course" id="test_preparation_course" required>
-                            <option value="" disabled selected>Select Course Status</option>
+                            <option value="" disabled selected>Select Status</option>
                             <option value="none">None</option>
                             <option value="completed">Completed</option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="reading_score">Reading Score (0-100)</label>
+                        <input type="number" name="reading_score" id="reading_score" min="0" max="100"
+                            placeholder="e.g. 85" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="writing_score">Writing Score (0-100)</label>
+                        <input type="number" name="writing_score" id="writing_score" min="0" max="100"
+                            placeholder="e.g. 78" required>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="reading_score">📖 Reading Score (0-100)</label>
-                    <input type="number" name="reading_score" id="reading_score" min="0" max="100" placeholder="Enter score" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="writing_score">✍️ Writing Score (0-100)</label>
-                    <input type="number" name="writing_score" id="writing_score" min="0" max="100" placeholder="Enter score" required>
-                </div>
-
-                <button type="submit">Predict your Maths Score</button>
+                <button type="submit" class="btn-predict">
+                    Execute Prediction
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                </button>
             </form>
 
             {% if results %}
-            <div class="result-box">
-                <div class="result-text">The prediction is {{ results }}</div>
+            <div class="result-container">
+                <span class="result-label">Predicted Maths Score</span>
+                <div class="result-value">{{ results }}</div>
             </div>
             {% endif %}
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="{{ url_for('index') }}"
+                    style="color: var(--text-dim); text-decoration: none; font-size: 0.875rem;">← Back to Dashboard</a>
+            </div>
         </div>
     </div>
 </body>
+
 </html>
